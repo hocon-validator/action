@@ -1,0 +1,55 @@
+name: HOCON Validator
+on:
+  push:
+    branches:
+      - "**"
+    tags-ignore:
+      - "**"
+  pull_request_target:
+  issue_comment:
+    types: [created]
+
+jobs:
+  validate-files:
+    name: Validate Files
+    runs-on: ubuntu-20.04
+    continue-on-error: true
+    steps:
+    - name: checkout-merge
+      if: "contains(github.event_name, 'pull_request')"
+      uses: actions/checkout@v2
+      with:
+        ref: refs/pull/${{github.event.pull_request.number}}/merge
+    - name: checkout
+      if: "!contains(github.event_name, 'pull_request')"
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+    - name: hocon-validator-files
+      uses: ./
+      with:
+        hocon-files: "test/mix-objects.conf"
+        verbose: 1
+  validate-list:
+    name: Validate List
+    runs-on: ubuntu-20.04
+    continue-on-error: true
+    steps:
+    - name: checkout-merge
+      if: "contains(github.event_name, 'pull_request')"
+      uses: actions/checkout@v2
+      with:
+        ref: refs/pull/${{github.event.pull_request.number}}/merge
+    - name: checkout
+      if: "!contains(github.event_name, 'pull_request')"
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+    - name: build-list
+      shell: bash
+      run:
+        git ls-files 'test/*o*-*.conf' -z > /tmp/hocon-files.list
+    - name: hocon-validator-list
+      uses: ./
+      with:
+        hocon-file-list: /tmp/hocon-files.list

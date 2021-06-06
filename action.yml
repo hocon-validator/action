@@ -1,0 +1,29 @@
+name: 'HOCON Validator'
+description: 'Validate hocon files'
+author: 'jsoref'
+branding:
+  icon: 'edit-3'
+  color: 'blue'
+inputs:
+  hocon-files:
+    description: 'List of hocon files to check'
+    required: false
+  hocon-file-list:
+    description: 'Null delimited file of hocon files to check'
+    required: false
+  verbose:
+    description: 'Enable verbose logging'
+    default: ''
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    - id: spelling
+      env:
+        FILES: ${{ inputs.hocon-files }}
+        LIST: ${{ inputs.hocon-file-list }}
+        VERBOSE: ${{ inputs.verbose }}
+      run:
+        $GITHUB_ACTION_PATH/check.sh
+      shell: bash

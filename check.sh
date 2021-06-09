@@ -12,7 +12,7 @@ npm ci >/dev/null 2>/dev/null
 npm bin
 ):$PATH"
 
-echo "::add-matcher::match-syntax.json"
+echo "::add-matcher::$GITHUB_ACTION_PATH/match-syntax.json"
 
 if [ -z "$FILES" ] && [ ! -s "$LIST" ]; then
     echo "No files configured" >&2

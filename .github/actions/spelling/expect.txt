@@ -3,3 +3,4 @@ hocon
 josephtzeng
 jsoref
 mktemp
+sudo

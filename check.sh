@@ -12,6 +12,10 @@ npm ci >/dev/null 2>/dev/null
 npm bin
 ):$PATH"
 
+command -v "parallel" >/dev/null 2>/dev/null || (
+  sudo apt-get update
+  sudo apt-get install -y parallel
+)
 echo "::add-matcher::$GITHUB_ACTION_PATH/match-syntax.json"
 
 if [ -z "$FILES" ] && [ ! -s "$LIST" ]; then

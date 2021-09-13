@@ -9,7 +9,7 @@ ignore$
 \.jpe?g$
 \.lock$
 \.map$
-\.min\.
+\.min\..
 \.mod$
 \.mp[34]$
 \.png$

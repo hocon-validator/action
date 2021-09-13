@@ -3,4 +3,4 @@ hocon
 josephtzeng
 jsoref
 mktemp
-sudo
+xargs

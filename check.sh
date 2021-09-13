@@ -12,10 +12,6 @@ npm ci >/dev/null 2>/dev/null
 npm bin
 ):$PATH"
 
-command -v "parallel" >/dev/null 2>/dev/null || (
-  sudo apt-get update
-  sudo apt-get install -y parallel
-)
 echo "::add-matcher::$GITHUB_ACTION_PATH/match-syntax.json"
 
 if [ -z "$FILES" ] && [ ! -s "$LIST" ]; then
@@ -31,7 +27,7 @@ for file in $FILES; do
 done
 
 if [ -n "$LIST" ]; then
-    cat $LIST | parallel --no-notice --no-run-if-empty -0 -n1 $GITHUB_ACTION_PATH/check-file.sh
+    cat $LIST | xargs -P 2 -0 -n1 $GITHUB_ACTION_PATH/check-file.sh
 fi
 
 if [ -e $NO_PROBLEMS ]; then
@@ -41,6 +37,6 @@ if [ -e $NO_PROBLEMS ]; then
     exit 0
 fi
 printf "\n\n${start_bold}## Syntax errors found in the following files ##${end_bold}\n\n"
-find "$PROBLEM_FILES_DIR" -type f |parallel --no-notice --no-run-if-empty cat
+find "$PROBLEM_FILES_DIR" -type f |xargs -P 2 cat
 echo "If you believe there to be an error, note that this script expects files to be in HOCON format and utilizes hocon-parser."
 exit 1
